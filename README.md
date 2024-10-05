@@ -20,6 +20,11 @@ Go your console page and create a ```New Project```. Copy a project ID that you 
 export PROJECT_ID=<YOUR_PROJECT_ID>
 ```
 
+Set created project as the active project
+```bash
+gcloud config set project $PROJECT_ID
+```
+
 then create a service account and role for terraform
 ```bash
 gcloud iam service-accounts create sa-terraform \
@@ -28,10 +33,15 @@ gcloud iam service-accounts create sa-terraform \
 
 gcloud projects add-iam-policy-binding $PROJECT_ID \
     --member="serviceAccount:sa-terraform@$PROJECT_ID.iam.gserviceaccount.com" \
-    --role="roles/editor"
+    --role="roles/owner"
 
 gcloud iam service-accounts keys create ./sa-key.json \
     --iam-account=sa-terraform@$PROJECT_ID.iam.gserviceaccount.com
+```
+
+enable to api for created in project
+```bash
+gcloud services enable compute.googleapis.com --project=$PROJECT_ID
 ```
 
 ### 2. Terraform
